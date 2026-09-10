@@ -428,6 +428,8 @@ networks:
   smp-network:
     driver: bridge
 
+
+
 volumes:
   pg_data:
   grafana_data:
