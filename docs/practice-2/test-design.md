@@ -36,7 +36,11 @@
 | reserve | 199999 |      200000 | 200001 | 200 / 200 / 4xx |
 
 ## 3. Pairwise (PICT)
-model.txt и результат cases.txt лежат в папке pict
+
+| Сервис | Модель | Набор |
+|---|---|---|
+| Authorization | `pict/model.txt` | `pict/cases.txt` |
+| Card-Management | `pict/model-card-management.txt` | `pict/cases-card-management.txt` |
 
 ## 4. Тест-кейсы
 ### 4.1 По классам эквивалентности
@@ -101,3 +105,37 @@ model.txt и результат cases.txt лежат в папке pict
 | TC-PW-23 | ACTIVE | equal | above | above | current_month | atm | grocery | `61` |
 | TC-PW-24 | EXPIRED | below | below | below | current_month | atm | electronics | `54` |
 | TC-PW-25 | ACTIVE | below | below | below | expired | atm | grocery | `54` |
+
+### 4.4 Pairwise Card-Management
+
+| ID | operation | bin | status | pan_exists | pan_len | amount | count | Ожидание |
+|---|---|---|---|---|---|---|---|---|
+| TC-PW-C01 | patch | valid | INACTIVE | yes | 16 | below | one | 200 |
+| TC-PW-C02 | patch | valid | ACTIVE | yes | 17 | below | one | 4xx |
+| TC-PW-C03 | delete | valid | INACTIVE | yes | 15 | below | one | 4xx |
+| TC-PW-C04 | delete | valid | ACTIVE | no | 16 | below | one | 404 |
+| TC-PW-C05 | patch | valid | BLOCKED | yes | 15 | below | one | 4xx |
+| TC-PW-C06 | delete | valid | BLOCKED | yes | 17 | below | one | 4xx |
+| TC-PW-C07 | reserve | valid | BLOCKED | yes | 16 | above | one | 4xx |
+| TC-PW-C08 | get | valid | BLOCKED | yes | 16 | below | one | 200 |
+| TC-PW-C09 | delete | valid | EXPIRED | yes | 16 | below | one | 200 |
+| TC-PW-C10 | reserve | valid | INACTIVE | yes | 16 | equal | one | 200 |
+| TC-PW-C11 | get | valid | EXPIRED | yes | 15 | below | one | 4xx |
+| TC-PW-C12 | reserve | valid | EXPIRED | yes | 16 | below | one | 200 |
+| TC-PW-C13 | reserve | valid | INACTIVE | yes | 16 | above | one | 4xx |
+| TC-PW-C14 | reserve | valid | ACTIVE | no | 16 | above | one | 404 |
+| TC-PW-C15 | get | valid | ACTIVE | yes | 17 | below | one | 4xx |
+| TC-PW-C16 | generate | valid | ACTIVE | no | 16 | below | zero | 4xx |
+| TC-PW-C17 | reserve | valid | EXPIRED | yes | 16 | above | one | 4xx |
+| TC-PW-C18 | delete | valid | ACTIVE | yes | 15 | below | one | 4xx |
+| TC-PW-C19 | generate | valid | ACTIVE | no | 16 | below | hundred | 200 |
+| TC-PW-C20 | reserve | valid | EXPIRED | yes | 16 | equal | one | 200 |
+| TC-PW-C21 | patch | valid | ACTIVE | no | 16 | below | one | 404 |
+| TC-PW-C22 | get | valid | INACTIVE | yes | 17 | below | one | 4xx |
+| TC-PW-C23 | reserve | valid | BLOCKED | yes | 16 | equal | one | 200 |
+| TC-PW-C24 | get | valid | ACTIVE | no | 16 | below | one | 404 |
+| TC-PW-C25 | create | invalid | ACTIVE | no | 16 | below | one | 4xx |
+| TC-PW-C26 | create | valid | ACTIVE | no | 16 | below | one | 201 |
+| TC-PW-C27 | generate | valid | ACTIVE | no | 16 | below | one | 200 |
+| TC-PW-C28 | reserve | valid | ACTIVE | no | 16 | equal | one | 404 |
+| TC-PW-C29 | patch | valid | EXPIRED | yes | 17 | below | one | 4xx |

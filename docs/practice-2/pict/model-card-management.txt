@@ -1,0 +1,15 @@
+operation:     create, get, patch, delete, generate, reserve
+bin:           valid, invalid
+status:        ACTIVE, INACTIVE, BLOCKED, EXPIRED
+pan_exists:    yes, no
+pan_length:    15, 16, 17
+amount_vs_bal: below, equal, above
+count:         zero, one, hundred
+
+IF [operation] <> "create" THEN [bin] = "valid";
+IF [operation] <> "generate" THEN [count] = "one";
+IF [operation] <> "reserve" THEN [amount_vs_bal] = "below";
+IF [operation] = "create" THEN [pan_exists] = "no" AND [pan_length] = 16 AND [status] = "ACTIVE";
+IF [operation] = "generate" THEN [pan_exists] = "no" AND [pan_length] = 16 AND [status] = "ACTIVE";
+IF [operation] = "reserve" THEN [pan_length] = 16;
+IF [pan_exists] = "no" AND [operation] <> "create" AND [operation] <> "generate" THEN [status] = "ACTIVE" AND [pan_length] = 16;
