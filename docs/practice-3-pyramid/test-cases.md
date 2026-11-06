@@ -34,7 +34,7 @@
 | **TC-EQ-A05** | TZ-04 §2.3 | **unit** | − | expiry < now | Логика даты `lastValidDay.isBefore(transmissionDate)`  | Чистая логика сравнения дат: `cardResponse.expiryDate().atEndOfMonth()` против даты транзакции. |
 | **TC-EQ-A06** | TZ-04 §2.4 | **unit** | − | > daily | Условие `checkAndUpdateLimits() == false` | Проверка реакции сервиса на исчерпание дневного лимита: мок репозитория возвращает 0 → код `61`. |
 | **TC-EQ-A07** | TZ-04 §2.5 | **unit** | − | > monthly | Условие `checkAndUpdateLimits() == false`  | Бизнес-правило лимита изолировано в сервисе: мок репозитория имитирует переполнение месяца → код `61`. |
-| **TC-EQ-A08** | TZ-04 §2.6 | **unit** | − | > balance | Арифметическое сравнение `amount.compareTo(availableBalance) > 0` | Сравнение сумм в памяти JVM; возврат кода `51` (`INSUFFICIENT_FUNDS`) без внешних обращений. |
+| **TC-EQ-A08** | TZ-04 §2.6 | **unit** | − | > balance | Арифметическое сравнение `amount.compareTo(availableBalance) > 0` | Сравнение сумм в памяти JVM; возврат кода `51` (`INSUFFICIENT_FUNDS`) без внешних обращений |
 | **TC-EQ-A09** | TZ-04 §2.7 | **api** | + | все OK | Сквозной контракт REST API: MTI, RRN, authCode, HTTP 200 | Проверяет REST-контракт `POST /api/internal/authorize`, сериализацию DTO и формат выходных полей. |
 | **TC-EQ-A10** | TZ-04 §5 | **integration** | − | CMS down | Обработка сетевого таймаута / 503 от CMS | Проверяет сетевую устойчивость: Authorization вызывает CMS, ловит `ServiceUnavailableException` → код `96`. |
 
