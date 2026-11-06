@@ -173,7 +173,7 @@
 
 ### 4.4 Pairwise Card-Management
 
-Общие **предусловие и шаги** для TC-PW-C01…29: если `pan_exists=yes` — создать карту со `status` и PAN длины `pan_len`; если `no` — взять несуществующий PAN. `create`/`generate` — POST без существующего PAN. `reserve` — amount относительно текущего баланса (below/equal/above). 
+Общие **предусловие и шаги** для TC-PW-C01…29: если `pan_exists=yes` — создать карту со `status` и PAN длины `pan_len`; если `no` — взять несуществующий PAN. `create`/`generate` — POST без существующего PAN. `reserve` — amount относительно текущего баланса (below/equal/above).
 
 | ID | Вид | operation | bin | status | pan_exists | pan_len | amount | count | Ожидание |
 |---|---|---|---|---|---|---|---|---|---|

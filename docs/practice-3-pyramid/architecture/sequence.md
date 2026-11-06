@@ -38,33 +38,33 @@ sequenceDiagram
 
     Note over SW,AUTH: 2. Маршрутизация по BIN и вызов авторизации (HTTP)
     Note over SW: RoutingService: BIN 400000 -> ISS001
-    SW->>AUTH: POST /api/internal/authorize 
+    SW->>AUTH: POST /api/internal/authorize
 
     Note over AUTH,CMS: 3. Валидация, лимиты и резервирование (HTTP + JDBC)
     AUTH->>CMS: GET /api/cards/{pan}
-    CMS-->>AUTH: 200 OK 
-    AUTH->>BIN: GET /api/bin/{bin} 
-    BIN-->>AUTH: 200 OK 
-    AUTH->>PG: SQL UPSERT INTO limit_usage 
-    PG-->>AUTH: Updated rows = 1 
-    AUTH->>CMS: POST /api/cards/{pan}/reserve 
+    CMS-->>AUTH: 200 OK
+    AUTH->>BIN: GET /api/bin/{bin}
+    BIN-->>AUTH: 200 OK
+    AUTH->>PG: SQL UPSERT INTO limit_usage
+    PG-->>AUTH: Updated rows = 1
+    AUTH->>CMS: POST /api/cards/{pan}/reserve
     CMS->>PG: INSERT INTO card_reservations, UPDATE cards.available_balance
-    CMS-->>AUTH: 200 OK 
+    CMS-->>AUTH: 200 OK
     Note over AUTH: generateRRN(), generateAuthCode()
-    AUTH-->>SW: 200 OK 
+    AUTH-->>SW: 200 OK
 
     Note over SW,RMQ: 4. Публикация транзакции с подтверждением брокера (AMQP)
     SW->>RMQ: Publish (exchange: smp.transactions, rk: transaction.log)
-    RMQ-->>SW: Publisher Confirm ACK 
+    RMQ-->>SW: Publisher Confirm ACK
     SW-->>GW: 200 OK
     GW-->>T: 200 OK
 
-    Note over RMQ,LOG: 5. Асинхронная ветка: логирование транзакции 
+    Note over RMQ,LOG: 5. Асинхронная ветка: логирование транзакции
     RMQ->>LOG: Deliver
     LOG->>PG: INSERT INTO transactions
     LOG->>LOG: DefaultWebSocketManager.broadcast() (/ws/transactions)
 
-    Note over CMS,NOTIF: 6. Асинхронная ветка: Transactional Outbox 
+    Note over CMS,NOTIF: 6. Асинхронная ветка: Transactional Outbox
     Note over CMS: OutboxEventProcessorImpl
     CMS->>RMQ: Publish (exchange: smp.card-events, rk: card.CardServiceReserveEvent)
     RMQ->>NOTIF: Deliver (queue: card-notifications)
@@ -116,7 +116,7 @@ sequenceDiagram
     GW->>SW: POST /api/internal/route
     SW->>AUTH: POST /api/internal/authorize
     AUTH->>CMS: POST /api/cards/{pan}/reserve (средства заблокированы)
-    CMS-->>AUTH: 200 OK 
+    CMS-->>AUTH: 200 OK
     AUTH-->>SW: 200 OK
 
     Note over SW,RMQ: 2. Попытка отправки в RabbitMQ завершается сбоем
@@ -129,14 +129,13 @@ sequenceDiagram
     Note over SW,CMS: 3. Вызов компенсирующей транзакции (Rollback)
     SW->>AUTH: POST /api/internal/rollback
     Note over AUTH: AuthServiceImpl: rollback()
-    AUTH->>CMS: POST /api/cards/{pan}/rollback 
+    AUTH->>CMS: POST /api/cards/{pan}/rollback
     Note over CMS: CardServiceImpl: rollback()<br/>Снятие блокировки с available_balance,<br/>сохранение записи в card_rollbacks
     CMS->>PG: INSERT INTO card_rollbacks, UPDATE cards SET available_balance
-    CMS-->>AUTH: 200 OK 
+    CMS-->>AUTH: 200 OK
     AUTH-->>SW: 200 OK
 
     Note over SW: Возврат системного отказа:<br/>AuthorizationResponse.systemError<br/>status="DECLINED", responseCode="96"
     SW-->>GW: 200 OK (AuthorizationResponse: DECLINED, code="96")
     GW-->>T: 200 OK (Клиент получает DECLINED с кодом 96)
 ```
-

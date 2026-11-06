@@ -7,8 +7,8 @@
 ## Что сделано
 
 Построены подробные компонентные диаграммы C4 Level 3 для двух ключевых микросервисов ядра процессинга:
-1. **Authorization Service** 
-2. **Card-Management Service** 
+1. **Authorization Service**
+2. **Card-Management Service**
 
 ---
 
