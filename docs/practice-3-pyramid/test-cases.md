@@ -31,7 +31,7 @@
 | **TC-EQ-A02** | TZ-04 §2.2 | **unit** | − | INACTIVE | Ветвление `currCardStatus == INACTIVE` | Проверка ветки `switch` в бизнес-логике: мок возвращает статус `INACTIVE` → код `05`. |
 | **TC-EQ-A03** | TZ-04 §2.2 | **unit** | − | BLOCKED | Ветвление `currCardStatus == BLOCKED` | Логика отказа по заблокированной карте: мок возвращает `BLOCKED` → код `05`. |
 | **TC-EQ-A04** | TZ-04 §2.2 | **unit** | − | EXPIRED (status) | Ветвление `currCardStatus == EXPIRED` | Проверка статуса истекшей карты → код `54`. Изолированный тест в памяти JVM. |
-| **TC-EQ-A05** | TZ-04 §2.3 | **unit** | − | expiry < now | Логика даты `lastValidDay.isBefore(transmissionDate)`  | Чистая логика сравнения дат: `cardResponse.expiryDate().atEndOfMonth()` против даты транзакции. |
+| **TC-EQ-A05** | TZ-04 §2.3 | **unit** | − | expiry < now | Логика даты `lastValidDay.isBefore(transmissionDate)`  | Чистая логика сравнения дат: `cardResponse.expiryDate().atEndOfMonth()` против даты транзакции |
 | **TC-EQ-A06** | TZ-04 §2.4 | **unit** | − | > daily | Условие `checkAndUpdateLimits() == false` | Проверка реакции сервиса на исчерпание дневного лимита: мок репозитория возвращает 0 → код `61`. |
 | **TC-EQ-A07** | TZ-04 §2.5 | **unit** | − | > monthly | Условие `checkAndUpdateLimits() == false`  | Бизнес-правило лимита изолировано в сервисе: мок репозитория имитирует переполнение месяца → код `61`. |
 | **TC-EQ-A08** | TZ-04 §2.6 | **unit** | − | > balance | Арифметическое сравнение `amount.compareTo(availableBalance) > 0` | Сравнение сумм в памяти JVM; возврат кода `51` (`INSUFFICIENT_FUNDS`) без внешних обращений |
