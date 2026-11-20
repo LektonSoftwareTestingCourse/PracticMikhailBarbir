@@ -171,8 +171,8 @@ jobs:
         done
         sleep 15
 
-    - name: Run e2e tests
-      run: mvn -f services/pom.xml -pl e2e-tests -am test -DskipE2eTests=false
+    - name: Run API tests
+      run: mvn -f services/pom.xml -pl api-tests -am test -DskipApiTests=false
 
     - name: Show logs on failure
       if: failure()
