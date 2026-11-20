@@ -18,7 +18,6 @@ import static org.hamcrest.Matchers.*;
 
 /**
  * Тестирование REST-контракта поиска и экспорта транзакций (/api/transactions/search, /api/transactions/export).
- * 
  * Демонстрирует:
  * - GPath-фильтр (transactions.findAll { ... })
  * - Проверку размера массива (hasSize)
@@ -43,9 +42,9 @@ public class TransactionSearchApiTest extends BaseApiTest {
         RestAssured.given()
                 .spec(gatewaySpec)
                 .body(request)
-        .when()
+                .when()
                 .post("/api/transactions")
-        .then()
+                .then()
                 .statusCode(200);
 
         // WHEN & THEN: Ожидаем сохранения и проверяем GPath-фильтром
@@ -55,9 +54,9 @@ public class TransactionSearchApiTest extends BaseApiTest {
                     RestAssured.given()
                             .spec(gatewaySpec)
                             .queryParam("pan", card.pan())
-                    .when()
+                            .when()
                             .get("/api/transactions/search")
-                    .then()
+                            .then()
                             .statusCode(200)
                             .contentType(ContentType.JSON)
                             .body("total", greaterThanOrEqualTo(1))
@@ -75,10 +74,10 @@ public class TransactionSearchApiTest extends BaseApiTest {
                 .spec(gatewaySpec)
                 .queryParam("status", "APPROVED")
                 .queryParam("limit", 10)
-        .when()
+                .when()
                 .get("/api/transactions/search")
-        // THEN
-        .then()
+                // THEN
+                .then()
                 .statusCode(200)
                 .body("transactions.every { it.status == 'APPROVED' }", equalTo(true));
     }
@@ -93,10 +92,10 @@ public class TransactionSearchApiTest extends BaseApiTest {
         RestAssured.given()
                 .spec(gatewaySpec)
                 .queryParam("pan", nonExistentPan)
-        .when()
+                .when()
                 .get("/api/transactions/search")
-        // THEN
-        .then()
+                // THEN
+                .then()
                 .statusCode(200)
                 .body("total", equalTo(0))
                 .body("transactions", hasSize(0));
@@ -110,10 +109,10 @@ public class TransactionSearchApiTest extends BaseApiTest {
                 .spec(gatewaySpec)
                 .queryParam("limit", 2)
                 .queryParam("offset", 0)
-        .when()
+                .when()
                 .get("/api/transactions/search")
-        // THEN
-        .then()
+                // THEN
+                .then()
                 .statusCode(200)
                 .body("transactions", hasSize(lessThanOrEqualTo(2)));
     }
@@ -125,10 +124,10 @@ public class TransactionSearchApiTest extends BaseApiTest {
         RestAssured.given()
                 .spec(gatewaySpec)
                 .queryParam("limit", 501)
-        .when()
+                .when()
                 .get("/api/transactions/search")
-        // THEN
-        .then()
+                // THEN
+                .then()
                 .statusCode(400);
     }
 
@@ -139,10 +138,10 @@ public class TransactionSearchApiTest extends BaseApiTest {
         RestAssured.given()
                 .spec(gatewaySpec)
                 .queryParam("offset", -1)
-        .when()
+                .when()
                 .get("/api/transactions/search")
-        // THEN
-        .then()
+                // THEN
+                .then()
                 .statusCode(400);
     }
 
@@ -153,10 +152,10 @@ public class TransactionSearchApiTest extends BaseApiTest {
         RestAssured.given()
                 .spec(gatewaySpec)
                 .queryParam("limit", 5)
-        .when()
+                .when()
                 .get("/api/transactions/export")
-        // THEN
-        .then()
+                // THEN
+                .then()
                 .statusCode(200)
                 .contentType(containsString("text/csv"))
                 .header("Content-Disposition", containsString("transactions.csv"));
