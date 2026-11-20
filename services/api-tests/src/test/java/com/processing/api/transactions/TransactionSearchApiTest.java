@@ -17,7 +17,7 @@ import static org.awaitility.Awaitility.await;
 import static org.hamcrest.Matchers.*;
 
 /**
- * Тестирование REST-контракта поиска и экспорта транзакций (/api/transactions/search, /api/transactions/export).
+ * Тестирование REST-контракта поиска и экспорта транзакций (/api/transactions/search, /api/transactions/export)
  * Демонстрирует:
  * - GPath-фильтр (transactions.findAll { ... })
  * - Проверку размера массива (hasSize)
